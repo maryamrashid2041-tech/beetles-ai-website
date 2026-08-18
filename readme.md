@@ -43,7 +43,7 @@ See [ROADMAP.md](ROADMAP.md) for planned features.
 
 Built by a 14-year-old founder from Pakistan 🇵🇰
 
-Follow the journey: [@YourXHandle](https://x.com/yourhandle)
+Follow the journey: [@preneurMaryam)
 
 ---
 
