@@ -422,7 +422,7 @@ if uploaded_file is not None:
         <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,212,255,0.1)); border-radius: 16px;">
             <h3>🚀 Ready to verify at scale?</h3>
             <p>Beetles AI Pro includes bulk upload, PDF reports, API access, and more.</p>
-            <p><strong>📧 Contact: your.email@example.com</strong></p>
+            <p><strong>📧 Contact: your.email@example.com </strong></p>
         </div>
         """, unsafe_allow_html=True)
 
