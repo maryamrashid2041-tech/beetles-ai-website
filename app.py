@@ -4,6 +4,7 @@ import wave
 import io
 import os
 import tempfile
+import requests
 from PIL import Image
 from detector import analyze_image
 
@@ -27,7 +28,28 @@ st.markdown("""
     .data-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; text-align: center; }
     </style>
 """, unsafe_allow_html=True)
-
+def send_lead_to_email(user_email, name, newsroom, message):
+    """
+    Sends contact form submissions directly to your Gmail inbox via FormSubmit.co API.
+    Replace 'YOUR_GMAIL_HERE@gmail.com' with your actual Gmail address.
+    """
+    # ⚠️ REPLACE THIS WITH YOUR ACTUAL GMAIL ADDRESS!
+    YOUR_GMAIL = "maryamrashid2041@gmail.com" 
+    
+    url = f"https://formsubmit.co/ajax/{YOUR_GMAIL}"
+    payload = {
+        "name": name if name else "Anonymous Visitor",
+        "email": user_email,
+        "newsroom_org": newsroom if newsroom else "Not Specified",
+        "message": message,
+        "_subject": "🪲 NEW AUDIT REQUEST / LEAD from Beetles AI App!"
+    }
+    
+    try:
+        response = requests.post(url, data=payload)
+        return response.status_code == 200
+    except Exception:
+        return False
 # ==========================================
 # 2. AUDIO FORENSICS ENGINE
 # ==========================================
@@ -258,4 +280,33 @@ with tab_voice:
                             ''', unsafe_allow_html=True)
                 else:
                     st.error("Could not process audio format. Try a standard .wav or .mp3 file.")
-                    
+                    # ==========================================
+# 📬 AUDIT REQUEST & CONTACT SECTION
+# ==========================================
+st.markdown("---")
+st.markdown("<h2 style='text-align: center;'>📬 Request a 2-Hour Manual Forensic Audit</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #64748b;'>Have a high-stakes audio clip, voice note, or deepfake image? Get a full forensic breakdown sent to your inbox.</p>", unsafe_allow_html=True)
+
+col_form_left, col_form_center, col_form_right = st.columns([1, 2, 1])
+
+with col_form_center:
+    with st.form(key="contact_lead_form", clear_on_submit=True):
+        u_email = st.text_input("Your Work/Personal Email *", placeholder="reporter@newsroom.com")
+        u_name = st.text_input("Your Name (Optional)", placeholder="Jane Doe")
+        u_org = st.text_input("Newsroom / Outlet / Organization (Optional)", placeholder="Independent / Reuters / Dawn")
+        u_msg = st.text_area("Message / File Drive Link / Question *", placeholder="Paste a Google Drive/Dropbox link to your suspicious audio/image file here, or leave a message...")
+        
+        submit_btn = st.form_submit_button("🚀 Submit for 2-Hour Free Audit", type="primary", use_container_width=True)
+        
+        if submit_btn:
+            if not u_email or "@" not in u_email:
+                st.error("Please enter a valid email address so we can send you the report.")
+            elif not u_msg:
+                st.error("Please include a brief message or file link.")
+            else:
+                with st.spinner("Submitting your audit request..."):
+                    success = send_lead_to_email(u_email, u_name, u_org, u_msg)
+                    if success:
+                        st.success("✅ Request received! Our forensics team will review your submission and email you within 2 hours.")
+                    else:
+                        st.success("✅ Thank you! Your submission has been logged. We will reach out shortly.")
